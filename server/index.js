@@ -28,7 +28,7 @@ io.on("connection" , (socket)=>{
         io.emit("messageRespond" , data)
     })
     socket.on("newUser" , (data)=>{
-        console.log(data);
+        // console.log(data);
         users.push(data)
         console.log(users);
         io.emit("newUserResponse" , users)
