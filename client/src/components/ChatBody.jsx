@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const ChatBody = ({messages,lastMessageRef}) => {
+const ChatBody = ({name,messages,lastMessageRef , typingStatus , socket}) => {
+  console.log(messages);
   const navigate = useNavigate();
 
   const handleLeaveChat = () => {
@@ -10,10 +11,13 @@ const ChatBody = ({messages,lastMessageRef}) => {
     window.location.reload();
   };
 
+
+
+
   return (
     <>
       <header className="chat__mainHeader">
-        <p>Hangout with Colleagues</p>
+        <p>{name}</p>
         <button className="leaveChat__btn" onClick={handleLeaveChat}>
           LEAVE CHAT
         </button>
@@ -39,12 +43,9 @@ const ChatBody = ({messages,lastMessageRef}) => {
             </div>
           )
         )}
-        
-
-      
 
         <div className="message__status">
-          <p>Someone is typing...</p>
+          <p>{typingStatus}</p>
         </div>
         <div ref={lastMessageRef} />
       </div>
