@@ -24,13 +24,19 @@ io.on("connection", (socket) => {
   console.log(`⚡: ${socket.id} user just connected!`);
 
   socket.on("message", (data) => {
-    console.log(data);
-    if(!data.recipentId){
-      io.emit("messageResponse", data)
+    console.log(data.recipientId);
+    if(data.recipientId){
+      console.log(data);
+      socket.to(data.recipientId).emit("messageResponse", data),
+      console.log("upar");
     }
-    else(
-      socket.to(data.recipentId).emit("messageResponse", data));
-  });
+    else{
+      io.emit("messageResponse", data)
+      console.log("gyaaaaaaa");
+      console.log(data);
+    }
+    
+    });
 
   
 
@@ -42,7 +48,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("private_user", (data) => {
-    console.log(data);
+    // console.log(data);
     socket.emit("private_user_response", data);
   });
 

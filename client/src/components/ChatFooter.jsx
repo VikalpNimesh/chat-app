@@ -1,22 +1,30 @@
 import React, { useState } from 'react';
 
-const ChatFooter = ({socket ,sendToDetails}) => {
+const ChatFooter = ({socket ,sendToDetails ,setMessages,userName}) => {
   const [message, setMessage] = useState('');
 
-  const handleTyping = () => socket.emit("typing",`${localStorage.getItem('userName')} is typing `)
+  const handleTyping = () => socket.emit("typing",`${userName} is typing `)
 
   
   const handleSendMessage = (e) => {
     e.preventDefault();
-    // console.log({ userName: localStorage.getItem('userName'), message });
-    if (message.trim() && localStorage.getItem('userName')) {
-      socket.emit('message', {
+    if (message.trim() && userName) {
+      const newMessage = {
         text: message,
-        name: localStorage.getItem('userName'),
-        id: `${socket.id}${Math.random()}`,
+        name: userName,
+        id: Date.now(),
         socketID: socket.id,
-        recipentId :sendToDetails.socketID
-      });
+        recipientId: sendToDetails.socketID
+      };
+  
+      // Update messages state
+      if(sendToDetails.socketID){
+
+        setMessages(prevMessages => [...prevMessages, newMessage]);
+      }
+  
+      // Emit the message to the server
+      socket.emit('message', newMessage);
     }
     setMessage('');
   };

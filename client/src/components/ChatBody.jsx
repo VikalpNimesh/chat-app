@@ -1,23 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const ChatBody = ({name,messages,lastMessageRef , typingStatus , socket}) => {
-  console.log(messages);
+const ChatBody = ({setName,name,messages,lastMessageRef,userName , typingStatus , socket}) => {
+  // console.log(userName);
+  // console.log(messages);
   const navigate = useNavigate();
 
   const handleLeaveChat = () => {
-    localStorage.removeItem('userName');
     navigate('/');
     window.location.reload();
   };
 
-
+const handleDeleteUser=()=>{
+  setName("")
+}
 
 
   return (
     <>
       <header className="chat__mainHeader">
-        <p>{name}</p>
+        <p onClick={handleDeleteUser} >{name}</p>
         <button className="leaveChat__btn" onClick={handleLeaveChat}>
           LEAVE CHAT
         </button>
@@ -27,7 +29,7 @@ const ChatBody = ({name,messages,lastMessageRef , typingStatus , socket}) => {
       <div className="message__container">
 
       {messages.map((message) =>
-          message.name === localStorage.getItem('userName') ? (
+          message.name === userName ? (
             <div className="message__chats" key={message.id}>
               <p className="sender__name">You</p>
               <div className="message__sender">

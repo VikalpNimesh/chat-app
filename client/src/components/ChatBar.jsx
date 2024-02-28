@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-const ChatBar = ({socket}) => {
+const ChatBar = ({socket,userName}) => {
   const [users, setUsers] = useState([]);
   // const [socketid, setSocketid] = useState(null);
 
@@ -10,7 +10,7 @@ const ChatBar = ({socket}) => {
   useEffect(() => {
     socket.on("newUserResponse",(data)=>(
         
-      setUsers(data.filter((user)=>user.userName !==  localStorage.getItem('userName')))))
+      setUsers(data.filter((user)=>user.userName !==  userName))))
   }, [socket,users])
 
   const handlePrivateUser = (user) =>{
@@ -22,7 +22,7 @@ const ChatBar = ({socket}) => {
 
   return (
     <div className="chat__sidebar">
-      <h2>{localStorage.getItem('userName')}</h2>
+      <h2>{userName}</h2>
 
       <div>
         <h4 className="chat__header">ACTIVE USERS</h4>
