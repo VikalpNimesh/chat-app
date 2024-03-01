@@ -1,11 +1,40 @@
 import React, { useState } from 'react';
 
-const ChatFooter = ({socket ,sendToDetails ,setMessages,userName}) => {
+const ChatFooter = ({socket,name,typing ,setTyping,sendToDetails ,setMessages,userName}) => {
   const [message, setMessage] = useState('');
+  // console.log(name);
 
-  const handleTyping = () => socket.emit("typing",`${userName} is typing `)
+  const handleTyping = (e) => {
+    setMessage(e.target.value)
+    
+    console.log(typing);
+    setTyping(true) 
+    if(!typing){
 
-  
+      console.log(typing);
+      socket.emit("typing",`${userName} is typing `)
+      // setTyping(false) 
+    }
+    let lastTypingTime = new Date().getTime()
+    var timerLength = 1000
+
+    setTimeout(() => {
+            // setTyping(true) 
+
+      var timeNow =  new Date().getTime()
+      var timeDiff = timeNow - lastTypingTime;
+      // console.log("1", timeDiff, typing);
+      if(timeDiff >= timerLength && typing){
+        // console.log("2");
+
+        socket.emit("stop typing" , "")
+        setTyping(false)
+      }
+
+    }, timerLength);
+  }
+
+   
   const handleSendMessage = (e) => {
     e.preventDefault();
     if (message.trim() && userName) {
@@ -14,19 +43,16 @@ const ChatFooter = ({socket ,sendToDetails ,setMessages,userName}) => {
         name: userName,
         id: Date.now(),
         socketID: socket.id,
-        recipientId: sendToDetails.socketID
+        recipientId:name? sendToDetails.socketID : undefined
       };
   
-      // Update messages state
-      if(sendToDetails.socketID){
-
+      if(sendToDetails.socketID && name){
         setMessages(prevMessages => [...prevMessages, newMessage]);
       }
-  
-      // Emit the message to the server
-      socket.emit('message', newMessage);
+        socket.emit('message', newMessage);
     }
     setMessage('');
+    socket.emit("stop typing" , "")
   };
   return (
     <div className="chat__footer">
@@ -36,8 +62,7 @@ const ChatFooter = ({socket ,sendToDetails ,setMessages,userName}) => {
           placeholder="Write message"
           className="message"
           value={message}
-          onKeyDown={handleTyping}
-          onChange={(e) => setMessage(e.target.value)}
+          onChange={handleTyping}
         />
         <button className="sendBtn">SEND</button>
       </form>

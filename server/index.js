@@ -21,19 +21,19 @@ const io = new Server(server, {
 
 let users = [];
 io.on("connection", (socket) => {
-  console.log(`⚡: ${socket.id} user just connected!`);
+  // console.log(`⚡: ${socket.id} user just connected!`);
 
   socket.on("message", (data) => {
-    console.log(data.recipientId);
+
     if(data.recipientId){
-      console.log(data);
-      socket.to(data.recipientId).emit("messageResponse", data),
-      console.log("upar");
+      // console.log(data);
+      socket.to(data.recipientId).emit("messageResponse", data)
+      // console.log("upar");
     }
     else{
       io.emit("messageResponse", data)
-      console.log("gyaaaaaaa");
-      console.log(data);
+      // console.log("gyaaaaaaa");
+      // console.log(data);
     }
     
     });
@@ -53,7 +53,14 @@ io.on("connection", (socket) => {
   });
 
   socket.on("typing", (data) => {
-    socket.broadcast.emit("typingResponse", data);
+console.log(data);
+// console.log("play ");
+socket.broadcast.emit("typing", data);
+});
+socket.on("stop typing", (data) => {
+    // console.log("stop");
+    console.log("stop");
+    socket.broadcast.emit("stop typing", );
   });
   socket.on("disconnect", () => {
     console.log("🔥: A user disconnected");

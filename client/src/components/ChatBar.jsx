@@ -28,7 +28,8 @@ const ChatBar = ({socket,userName}) => {
         <h4 className="chat__header">ACTIVE USERS</h4>
         <div className="chat__users">
         {users.map((user) => (
-            <p style={{cursor:"pointer"}} onClick={()=>handlePrivateUser(user)} key={user.socketID}>{user.userName}</p>
+            <p style={{cursor:"pointer"}} onClick={()=>handlePrivateUser(user)} key={user.socketID}>{user.userName} <span>.</span> </p>
+            
           ))}
         </div>
       </div>

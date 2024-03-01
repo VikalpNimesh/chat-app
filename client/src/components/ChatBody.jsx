@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const ChatBody = ({setName,name,messages,lastMessageRef,userName , typingStatus , socket}) => {
-  // console.log(userName);
-  // console.log(messages);
+const ChatBody = ({setName,IsTyping,name,messages,lastMessageRef,userName , typing , socket}) => {
+  // console.log(typing);
+  // console.log(IsTyping);
   const navigate = useNavigate();
 
   const handleLeaveChat = () => {
@@ -12,14 +12,13 @@ const ChatBody = ({setName,name,messages,lastMessageRef,userName , typingStatus 
   };
 
 const handleDeleteUser=()=>{
-  setName("")
+  setName(null)
 }
-
 
   return (
     <>
-      <header className="chat__mainHeader">
-        <p onClick={handleDeleteUser} >{name}</p>
+      <header className="chat__mainHeader">Send To
+        <p onClick={handleDeleteUser} > {name? name : "Everyone"}</p>
         <button className="leaveChat__btn" onClick={handleLeaveChat}>
           LEAVE CHAT
         </button>
@@ -33,7 +32,7 @@ const handleDeleteUser=()=>{
             <div className="message__chats" key={message.id}>
               <p className="sender__name">You</p>
               <div className="message__sender">
-                <p>{message.text}</p>
+                <p>{message.text} </p>
               </div>
             </div>
           ) : (
@@ -47,7 +46,7 @@ const handleDeleteUser=()=>{
         )}
 
         <div className="message__status">
-          <p>{typingStatus}</p>
+          { IsTyping ? <div>{typing}</div> : (<></>)  }
         </div>
         <div ref={lastMessageRef} />
       </div>
